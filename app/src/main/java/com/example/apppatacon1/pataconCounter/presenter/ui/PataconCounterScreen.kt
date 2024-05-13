@@ -17,11 +17,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.apppatacon1.EggButton
 import com.example.apppatacon1.ui.theme.AppPatacon1Theme
 
+
 @Composable
-fun PataconCounterScreen(modifier: Modifier = Modifier) {
-    var eggCount by remember {
-        mutableIntStateOf(0)
-    }
+fun RootPataconCounterScreen(
+    eggCount: String,
+    onIncrease: () -> Unit,
+    onDecrease: () -> Unit
+){
+    PataconCounterScreen(
+        eggCount = eggCount,
+        onAction = { action ->
+        when(action){
+            PataconCounterAction.IncreasePataconCounter -> onIncrease()
+            PataconCounterAction.DecreasePataconCounter -> onDecrease()
+        }
+    })
+}
+@Composable
+private fun PataconCounterScreen(onAction: (PataconCounterAction)-> Unit,
+                                 eggCount: String,
+                         modifier: Modifier = Modifier) {
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -29,8 +45,15 @@ fun PataconCounterScreen(modifier: Modifier = Modifier) {
         Column(modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = eggCount.toString())
-            EggButton(modifier, onClick = {eggCount++})
+            Text(text = eggCount)
+            EggButton(modifier, textButton = "Agregar Patacon", onClick = {
+                onAction(PataconCounterAction.IncreasePataconCounter)
+                })
+            EggButton (
+                modifier, textButton = "Remover Patacon", onClick ={
+                    onAction(PataconCounterAction.DecreasePataconCounter)
+            })
+
         }
     }
 }
@@ -39,6 +62,8 @@ fun PataconCounterScreen(modifier: Modifier = Modifier) {
 @Composable
 fun PataconCounterScreenPreview() {
     AppPatacon1Theme {
-        PataconCounterScreen()
+        PataconCounterScreen(
+            eggCount = "69",
+            onAction = {})
     }
 }

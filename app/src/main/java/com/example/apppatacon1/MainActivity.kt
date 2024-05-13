@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.apppatacon1.pataconCounter.presenter.ui.PataconCounterScreen
+import com.example.apppatacon1.pataconCounter.presenter.ui.RootPataconCounterScreen
 import com.example.apppatacon1.ui.theme.AppPatacon1Theme
 
 class MainActivity : ComponentActivity() {
@@ -27,16 +27,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppPatacon1Theme {
-                PataconCounterScreen(Modifier)
+                var eggCount by remember {
+                    mutableIntStateOf(0)
+                }
+                RootPataconCounterScreen(
+                    eggCount = eggCount.toString(),
+                    onIncrease = {
+                                 eggCount++
+                },
+                    onDecrease = {
+                        eggCount--
+                    })
             }
         }
     }
 }
 
 @Composable
-fun EggButton(modifier: Modifier = Modifier, onClick: () -> Unit){
+fun EggButton(modifier: Modifier = Modifier, onClick: () -> Unit, textButton: String){
     Button(onClick = onClick, modifier = modifier) {
-        Text(text = "Nuevo Patacon")
+        Text(text = textButton)
     }
 }
 
